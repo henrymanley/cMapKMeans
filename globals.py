@@ -10,6 +10,9 @@ allStatements = stakeholder2Statements.append(stakeholder1Statements, ignore_ind
 # Number of sorters
 participants = 5
 
+# Number of piles, at most, a participant can make
+maxClusters = 9
+
 # First rating variable
 rating1 = "Feasibility"
 

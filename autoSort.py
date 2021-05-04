@@ -15,10 +15,10 @@ vec.fit(df.text.values)
 features = vec.transform(df.text.values)
 sorted = allStatements[['text']]
 
-def clusterData(df, features, n, returnData, rateMax):
+def clusterData(df, features, maxClusters, returnData, rateMax):
     """
     @param df is the list of statements of type df
-    @param n is the max number of clusters (categories) the data is to be sorted into.
+    @param maxClusters is the max number of clusters (categories) the data is to be sorted into.
     @param features is the vectorized text to cluster of type df.
     @param returnData is the df to write resulting data to.
     @param rateMax is the maximum rating a statement can get. This function assumes
@@ -26,11 +26,12 @@ def clusterData(df, features, n, returnData, rateMax):
     """
     for p in range(1, participants +1):
         start = df
-        n_clusters = random.randint(2,n)
+        n_clusters = random.randint(2,maxClusters)
         random_state = random.randint(0,10)
         cls = MiniBatchKMeans(n_clusters=n_clusters, random_state=random_state)
         cls.fit(features)
         cls.predict(features)
+
         start['participant' + str(p)] = pd.Series(cls.labels_, index=start.index)
         start = start[start.columns.drop(list(start.filter(regex='label')))]
         returnData = start.merge(returnData, left_index = True, on = 'text')
@@ -131,7 +132,7 @@ def buildAll(df, features, n, sorted, rateMax):
         ratingsWrite.to_excel(writer, sheet_name='Ratings', index = False)
         ratingsScaleWrite.to_excel(writer, sheet_name='RatingsScale', index = False)
 
-buildAll(df, features, 6, sorted, rateMax)
+buildAll(df, features, maxClusters, sorted, rateMax)
 
 
 # Graph the results
