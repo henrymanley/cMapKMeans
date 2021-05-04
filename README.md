@@ -15,7 +15,7 @@ library. The returned data set is titled "sortData.xlsx", which is defined by pa
 ![Spatial Meaned Clusters of Statements](kmeans.png)
 
 ## Set Up
-After cloning the repo and opening the respective directory, in the command line, paste: `pip install -r requirements.txt`. Then paste `python autoSort.py` to run the program. Open "sortData.xlsx" to find auto-generated sort data as specified by "globals.py". Change this file to change the sort...
+After cloning the repo and opening the respective directory, in the command line, paste: `pip install -r requirements.txt`. Then paste `python autoSort.py` to run the program. Open "sortData.xlsx" to find auto-generated sort data as specified by "globals.py". Change "globals.py" file to change the sort of the statements in "statements.xlsx".
 
 ## Concept Mapping
 <ul>
