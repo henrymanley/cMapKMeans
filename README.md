@@ -17,6 +17,20 @@ library. The returned data set is titled "sortData.xlsx", which is defined by pa
 ## Set Up
 After cloning the repo and opening the respective directory, in the command line, paste: `pip install -r requirements.txt`. Then paste `python autoSort.py` to run the program. Open "sortData.xlsx" to find auto-generated sort data as specified by "globals.py". Change "globals.py" file to change the sort of the statements in "statements.xlsx".
 
+## How to Use
+Open and edit "globals.py" to include the following parameters:
+
+<ul>
+<li> `stakeholder1` First stakeholder (eg. "Employees")
+<li> `stakeholder2` Second stakeholder (eg. "Board Members")
+<li> `participants` Number of participants providing statements. (eg. 5)
+<li> `maxClusters` Maximum number of piles one could sort statements into. (eg. 10)
+<li> `rating1` First rating item for each statement (eg. "Feasibility")
+<li> `rating2` Second rating item for each statement (eg. "Importance")
+<li> `rateMax` Rating scale for each item [1..rateMax] (eg. 5)
+</ul>
+Open and edit "statements.xlsx" to include the statements you want sorted.
+
 ## Concept Mapping
 <ul>
 <li> Bar, Haim, and Lucas Mentch. 2017. “R-Cmap‚ an Open-Source Software for Concept Mapping.” Evaluation and Program Planning 60: 284–92. doi:10.1016/j.evalprogplan.2016.08.018.
