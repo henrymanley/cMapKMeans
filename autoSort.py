@@ -1,22 +1,19 @@
 import random
 import numpy as np
-import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from globals import *
 
-
 # Define Global vectorized data
-df = pd.DataFrame(allStatements, columns=['text'])
+df = allStatements
+df.rename( columns={0 :'text'}, inplace=True )
 df['label'] = df.index
 vec = TfidfVectorizer(stop_words="english")
 vec.fit(df.text.values)
 features = vec.transform(df.text.values)
-
-# Merge on text for each iteration of the clustering algorithm
-sorted = pd.DataFrame(allStatements, columns=['text'])
+sorted = allStatements[['text']]
 
 def clusterData(df, features, n, returnData, rateMax):
     """
@@ -50,7 +47,7 @@ def clusterData(df, features, n, returnData, rateMax):
     return returnData
 
 
-def buildAll():
+def buildAll(df, features, n, sorted, rateMax):
     """
     From KMeans clusters, build the sorted and rated data set.
     """
@@ -134,7 +131,7 @@ def buildAll():
         ratingsWrite.to_excel(writer, sheet_name='Ratings', index = False)
         ratingsScaleWrite.to_excel(writer, sheet_name='RatingsScale', index = False)
 
-buildAll()
+buildAll(df, features, 6, sorted, rateMax)
 
 
 # Graph the results

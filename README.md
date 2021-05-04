@@ -1,7 +1,7 @@
 # cMapKMeans
 ### By Henry Manley
 Given a list of statements, number of participants, and participant demographics, cMapKMeans auto-generates a Concept Mapping xlsx to be passed into the cMAP R
-library. The returned data set is titled "sortData.xlsx", which is defined by parameters set in "globals.py".
+library. The returned data set is titled "sortData.xlsx", which is defined by parameters set in "globals.py" and user-generated statements made in "statements.xlsx".
 
 
 ## The Procedure
