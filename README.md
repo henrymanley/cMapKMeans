@@ -20,15 +20,15 @@ After cloning the repo and opening the respective directory, in the command line
 ## How to Use
 Open and edit "globals.py" to include the following parameters:
 
-<ul>
-<li> `stakeholder1` First stakeholder (eg. "Employees")
-<li> `stakeholder2` Second stakeholder (eg. "Board Members")
-<li> `participants` Number of participants providing statements. (eg. 5)
-<li> `maxClusters` Maximum number of piles one could sort statements into. (eg. 10)
-<li> `rating1` First rating item for each statement (eg. "Feasibility")
-<li> `rating2` Second rating item for each statement (eg. "Importance")
-<li> `rateMax` Rating scale for each item [1..rateMax] (eg. 5)
-</ul>
+
+`stakeholder1` First stakeholder (eg. "Employees")<br/>
+`stakeholder2` Second stakeholder (eg. "Board Members")<br/>
+`participants` Number of participants providing statements. (eg. 5)<br/>
+`maxClusters` Maximum number of piles one could sort statements into. (eg. 10)<br/>
+`rating1` First rating item for each statement (eg. "Feasibility")<br/>
+`rating2` Second rating item for each statement (eg. "Importance")<br/>
+`rateMax` Rating scale for each item [1..rateMax] (eg. 5)<br/>
+
 Open and edit "statements.xlsx" to include the statements you want sorted.
 
 ## Concept Mapping
