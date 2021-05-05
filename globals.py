@@ -1,12 +1,20 @@
 import pandas as pd
 
-stakeholder1 = "Employees"
-stakeholder2 = "Board"
+xl = pd.ExcelFile('statements.xlsx')
+stakeholders = xl.sheet_names
 
-stakeholder1Statements = pd.read_excel('statements.xlsx', sheet_name=stakeholder1, header=None)
-stakeholder2Statements = pd.read_excel('statements.xlsx', sheet_name=stakeholder2, header=None)
+
+iter = 0
+for i in stakeholders:
+    if iter ==0:
+        allStatements = pd.read_excel('statements.xlsx', sheet_name=i, header=None)
+    else:
+        stakeholder_i = pd.read_excel('statements.xlsx', sheet_name=i, header=None)
+        allStatements = allStatements.append(stakeholder_i, ignore_index = True)
+    iter +=1
+
 # Combination of all statements
-allStatements = stakeholder2Statements.append(stakeholder1Statements, ignore_index = True)
+
 # Number of sorters
 participants = 5
 
