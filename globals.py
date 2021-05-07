@@ -21,7 +21,7 @@ for i in stakeholders:
 # Number of sorters
 participants = 0
 for i in stakeholders:
-    participants += 10
+    participants += 12
 
 # Make demographics tab
 demographics = pd.DataFrame(index=range(participants))
@@ -30,8 +30,8 @@ demographics['Type'] = ""
 
 iter = 0
 for i in stakeholders:
-    demographics['Type'][iter: iter + 10] = i
-    iter += 10
+    demographics['Type'][iter: iter + 12] = i
+    iter += 12
 
 demographics[additionalDemoType] = ""
 for j in range(len(demographics)):
@@ -39,7 +39,8 @@ for j in range(len(demographics)):
     demographics[additionalDemoType][j] = additionalDemoOptions[i]
 
 # Number of piles, at most, a participant can make
-maxClusters = 9
+maxClusters = 15
+minClusters = 4
 
 # First rating variable
 rating1 = "Feasibility"
