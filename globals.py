@@ -1,8 +1,13 @@
 import pandas as pd
+import random
 
+# Read in Excel File with Statments by stakeholder group
 xl = pd.ExcelFile('statements.xlsx')
 stakeholders = xl.sheet_names
 
+# Add additional factor variables
+additionalDemoType = "Sex"
+additionalDemoOptions = ["Male", "Female"]
 
 iter = 0
 for i in stakeholders:
@@ -13,10 +18,25 @@ for i in stakeholders:
         allStatements = allStatements.append(stakeholder_i, ignore_index = True)
     iter +=1
 
-# Combination of all statements
-
 # Number of sorters
-participants = 5
+participants = 0
+for i in stakeholders:
+    participants += 10
+
+# Make demographics tab
+demographics = pd.DataFrame(index=range(participants))
+demographics['SorterID'] = demographics.index + 1
+demographics['Type'] = ""
+
+iter = 0
+for i in stakeholders:
+    demographics['Type'][iter: iter + 10] = i
+    iter += 10
+
+demographics[additionalDemoType] = ""
+for j in range(len(demographics)):
+    i = random.randint(0,len(additionalDemoOptions) -1 )
+    demographics[additionalDemoType][j] = additionalDemoOptions[i]
 
 # Number of piles, at most, a participant can make
 maxClusters = 9

@@ -1,4 +1,3 @@
-import random
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import MiniBatchKMeans
@@ -26,8 +25,11 @@ def clusterData(df, features, maxClusters, returnData, rateMax):
     """
     for p in range(1, participants +1):
         start = df
+        # Change cluster number/state for each demographic group
+        # if p == 1 or p%participants == 0:
         n_clusters = random.randint(2,maxClusters)
         random_state = random.randint(0,10)
+
         cls = MiniBatchKMeans(n_clusters=n_clusters, random_state=random_state)
         cls.fit(features)
         cls.predict(features)
@@ -58,11 +60,12 @@ def buildAll(df, features, n, sorted, rateMax):
     x['ID'] = x.index
     data = x
     x = x.rename(columns={'text': 'Statement',})
-    x['Statement ID'] = x.index
-    statementsWrite = x[['Statement ID', 'Statement']]
+    x['StatementID'] = x.index + 1
+    statementsWrite = x[['StatementID', 'Statement']]
 
-    x["UserID"] = x['ID']
+    x["UserID"] = x['ID'] + 1
     x = pd.wide_to_long(x, ["participant", "rating2/", "rating1/"], i="ID", j="num")
+    x = x.drop_duplicates()
     x = x.sort_values(by=['num', 'ID'])
     x = x.rename(columns={"rating1/": rating1, "rating2/": rating2})
     x["StatementID"] = x.groupby('num').ngroup(ascending=True)
@@ -84,7 +87,9 @@ def buildAll(df, features, n, sorted, rateMax):
     y["StatementID1"] += 1
     y = y.reset_index(drop=True)
     y = y.rename(columns={"StatementID1": "StatementID", "UserID1" : "UserID"})
-
+    y = y.drop_duplicates()
+    print(y.head(60))
+    # y = y.replace(0, np.nan)
     nStatements = y.groupby(['UserID', 'cluster']).count().max() + 1
     nStatements = nStatements['StatementID']
     accum = ['UserID', 'Cluster']
@@ -92,15 +97,20 @@ def buildAll(df, features, n, sorted, rateMax):
         accum.append('Statement' + str(st))
 
     z = pd.DataFrame(columns = accum)
-    for i in range(len(y)-1):
+    print(y)
+    for i in range(len(y)):
+        end = False
         clusterCurrent = y.loc[y.index[i], "cluster"]
-        clusterNext = y.loc[y.index[i+1], "cluster"]
         userCurrent = y.loc[y.index[i], "UserID"]
-        userNext = y.loc[y.index[i+1], "UserID"]
+        try:
+            clusterNext = y.loc[y.index[i+1], "cluster"]
+            userNext = y.loc[y.index[i+1], "UserID"]
+        except:
+            end = True
 
         if i == 0:
             statements = [userCurrent, clusterCurrent]
-        if (clusterNext == clusterCurrent):
+        if (clusterNext == clusterCurrent) and not end:
             statement = y.loc[y.index[i], "StatementID"]
             statements.append(statement)
         else:
@@ -108,7 +118,7 @@ def buildAll(df, features, n, sorted, rateMax):
             statements.append(statement)
             diff = nStatements + 2 - len(statements)
             for k in range(diff):
-                statements.append(0)
+                statements.append(np.nan)
             series = pd.Series(statements, index = z.columns)
             z = z.append(series, ignore_index=True)
             statements = [userNext, clusterNext]
@@ -116,6 +126,7 @@ def buildAll(df, features, n, sorted, rateMax):
     z = z.sort_values(by=[ "UserID", "Cluster"])
     z["UserID"] += 1
     z["Cluster"] += 1
+    z["Cluster"] = z["Cluster"].astype(str)
     sortedCardsWrite = z.reset_index(drop=True)
 
     accum = ["Variable", rating1, rating2]
@@ -127,10 +138,12 @@ def buildAll(df, features, n, sorted, rateMax):
     ratingsScaleWrite = r
 
     with pd.ExcelWriter('sortData.xlsx') as writer:
-        sortedCardsWrite.to_excel(writer, sheet_name='SortedCards', index = False, header = False)
         statementsWrite.to_excel(writer, sheet_name='Statements', index = False)
+        sortedCardsWrite.to_excel(writer, sheet_name='SortedCards', index = False, header = False)
+        demographics.to_excel(writer, sheet_name='Demographics', index = False, header = True)
         ratingsWrite.to_excel(writer, sheet_name='Ratings', index = False)
         ratingsScaleWrite.to_excel(writer, sheet_name='RatingsScale', index = False)
+
 
 buildAll(df, features, maxClusters, sorted, rateMax)
 
@@ -145,3 +158,6 @@ buildAll(df, features, maxClusters, sorted, rateMax)
 
 #need to add demographics, favor based on certain variables here.
 #clean up code, abstract variables to global file and import
+
+# add sex: male female --> must be a factor var.
+# get it to match the cmap data --> order of tabs?
